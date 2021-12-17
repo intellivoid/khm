@@ -1,0 +1,109 @@
+{
+    "package": {
+        "package_name": "net.intellivoid.khm",
+        "name": "Known Hosts Manager",
+        "version": "1.0.0.0",
+        "author": "Zi Xing Narrakas",
+        "organization": "Intellivoid Technologies",
+        "description": "Manages and checks known hosts to the system to block potential abuse hosts",
+        "url": "https://github.com/intellivoid/khm",
+        "dependencies": [
+            {
+                "package": "com.rmccue.requests",
+                "version": "latest",
+                "source": "rmccue@composer/requests",
+                "required": true
+            },
+            {
+                "package": "net.intellivoid.acm2",
+                "version": "latest",
+                "source": "default@github/intellivoid/acm2",
+                "required": true
+            },
+            {
+                "package": "net.intellivoid.msqg",
+                "version": "latest",
+                "source": "default@github/intellivoid/msqg",
+                "required": true
+            },
+            {
+                "package": "net.intellivoid.ziproto",
+                "version": "latest",
+                "source": "default@github/intellivoid/ziproto",
+                "required": true
+            }
+        ],
+        "configuration": {
+            "autoload_method": "generated_spl",
+            "main": null,
+            "post_installation": [],
+            "pre_installation": []
+        }
+    },
+    "components": [
+        {
+            "required": true,
+            "file": "Abstracts/GeoLookupSource.php"
+        },
+        {
+            "required": true,
+            "file": "Classes/Curl.php"
+        },
+        {
+            "required": true,
+            "file": "khm.php"
+        },
+        {
+            "required": true,
+            "file": "Exceptions/AbuseRecordNotFoundException.php"
+        },
+        {
+            "required": true,
+            "file": "Exceptions/DatabaseException.php"
+        },
+        {
+            "required": true,
+            "file": "Exceptions/GeoRecordNotFoundException.php"
+        },
+        {
+            "required": true,
+            "file": "Exceptions/KhmResolutionException.php"
+        },
+        {
+            "required": true,
+            "file": "Exceptions/BadGeoSourceException.php"
+        },
+        {
+            "required": true,
+            "file": "ThirdParty/IpAPI.php"
+        },
+        {
+            "required": true,
+            "file": "ThirdParty/AbuseIPDB.php"
+        },
+        {
+            "required": true,
+            "file": "ThirdParty/IpAPIco.php"
+        },
+        {
+            "required": true,
+            "file": "Objects/AbuseCheck.php"
+        },
+        {
+            "required": true,
+            "file": "Objects/GeoLookup.php"
+        },
+        {
+            "required": true,
+            "file": "Managers/GeoManager.php"
+        },
+        {
+            "required": true,
+            "file": "Managers/AbuseManager.php"
+        }
+    ],
+    "files": [
+        "package.json",
+        "data/asn.json"
+    ]
+}
