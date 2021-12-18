@@ -14,11 +14,14 @@
     use khm\Exceptions\GeoRecordNotFoundException;
     use khm\Managers\AbuseManager;
     use khm\Managers\GeoManager;
+    use khm\Managers\OnionManager;
     use khm\Objects\AbuseCheck;
     use khm\Objects\GeoLookup;
+    use khm\Objects\OnionRelay;
     use khm\ThirdParty\AbuseIPDB;
     use khm\ThirdParty\IpAPI;
     use khm\ThirdParty\IpAPIco;
+    use khm\ThirdParty\TorProject;
     use mysqli;
 
     class khm
@@ -59,6 +62,11 @@
         private $GeoManager;
 
         /**
+         * @var OnionManager
+         */
+        private $OnionManager;
+
+        /**
          * @throws ConfigurationNotDefinedException
          */
         public function __construct()
@@ -92,6 +100,7 @@
 
             $this->AbuseManager = new AbuseManager($this);
             $this->GeoManager = new GeoManager($this);
+            $this->OnionManager = new OnionManager($this);
         }
 
         /**
@@ -291,5 +300,42 @@
             }
 
             return $results;
+        }
+
+        /**
+         * Preforms a tor IP lookup against the database if the record exists
+         *
+         * @param string $ip_address
+         * @return OnionRelay
+         * @throws Exceptions\DatabaseException
+         * @throws Exceptions\OnionRecordNotFoundException
+         */
+        public function torLookup(string $ip_address): OnionRelay
+        {
+            return $this->OnionManager->getRecord($ip_address);
+        }
+
+        /**
+         * Syncs the current onion relays into the database
+         *
+         * @return void
+         * @throws Exceptions\DatabaseException
+         */
+        public function syncOnionRelays()
+        {
+            $onion_relays = TorProject::getRelays();
+
+            foreach($onion_relays as $relay)
+            {
+                try
+                {
+                    $this->OnionManager->getRecord($relay->IPAddress);
+                    $this->OnionManager->updateRecord($relay);
+                }
+                catch (Exceptions\OnionRecordNotFoundException $e)
+                {
+                    $this->OnionManager->registerRecord($relay);
+                }
+            }
         }
     }

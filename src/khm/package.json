@@ -75,6 +75,10 @@
         },
         {
             "required": true,
+            "file": "Exceptions/OnionRecordNotFoundException.php"
+        },
+        {
+            "required": true,
             "file": "Exceptions/BadGeoSourceException.php"
         },
         {
@@ -112,6 +116,10 @@
         {
             "required": true,
             "file": "Managers/AbuseManager.php"
+        },
+        {
+            "required": true,
+            "file": "Managers/OnionManager.php"
         }
     ],
     "files": [
