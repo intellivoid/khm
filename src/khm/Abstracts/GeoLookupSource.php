@@ -2,7 +2,7 @@
 
     namespace khm\Abstracts;
 
-    class GeoLookupSource
+    abstract class GeoLookupSource
     {
         const ipApi = 'ip-api.com';
 

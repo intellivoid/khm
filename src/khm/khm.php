@@ -241,6 +241,7 @@
          * @param array $query
          * @return array
          * @throws Exceptions\DatabaseException
+         * @throws Exception
          */
         public function multipleGeoLookup(array $query): array
         {
@@ -276,7 +277,7 @@
                 }
             }
 
-            foreach($api->get_batch(array_merge($new_queries, $update_queries)) as $lookup)
+            foreach($api->getBatch(array_merge($new_queries, $update_queries)) as $lookup)
             {
                 if(in_array($lookup->IPAddress, $update_queries))
                 {

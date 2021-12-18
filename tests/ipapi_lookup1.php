@@ -34,7 +34,7 @@
     ]);
 
     var_dump($api->get('91.198.174.192'));
-    var_dump($api->get_batch([
+    var_dump($api->getBatch([
         '100.142.29.254',
         '100.142.39.218'
     ]));

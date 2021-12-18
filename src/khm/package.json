@@ -47,6 +47,10 @@
         },
         {
             "required": true,
+            "file": "Abstracts/OnionVersionStatus.php"
+        },
+        {
+            "required": true,
             "file": "Classes/Curl.php"
         },
         {
@@ -75,6 +79,10 @@
         },
         {
             "required": true,
+            "file": "ThirdParty/TorProject.php"
+        },
+        {
+            "required": true,
             "file": "ThirdParty/IpAPI.php"
         },
         {
@@ -92,6 +100,10 @@
         {
             "required": true,
             "file": "Objects/GeoLookup.php"
+        },
+        {
+            "required": true,
+            "file": "Objects/OnionRelay.php"
         },
         {
             "required": true,

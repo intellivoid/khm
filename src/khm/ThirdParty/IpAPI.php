@@ -149,7 +149,7 @@
          * @return GeoLookup[]
          * @throws Exception
          */
-        public function get_batch(array $query): array
+        public function getBatch(array $query): array
         {
             $payload = $this->buildPayload($query);
             return $this->wait()->request_batch($payload);
