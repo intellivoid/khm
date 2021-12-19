@@ -13,6 +13,7 @@
     use khm\Exceptions\BadGeoSourceException;
     use khm\Exceptions\GeoRecordNotFoundException;
     use khm\Managers\AbuseManager;
+    use khm\Managers\DevicesManager;
     use khm\Managers\GeoManager;
     use khm\Managers\OnionManager;
     use khm\Objects\AbuseCheck;
@@ -67,6 +68,11 @@
         private $OnionManager;
 
         /**
+         * @var DevicesManager
+         */
+        private $DevicesManager;
+
+        /**
          * @throws ConfigurationNotDefinedException
          */
         public function __construct()
@@ -101,6 +107,7 @@
             $this->AbuseManager = new AbuseManager($this);
             $this->GeoManager = new GeoManager($this);
             $this->OnionManager = new OnionManager($this);
+            $this->DevicesManager = new DevicesManager($this);
         }
 
         /**
@@ -337,5 +344,13 @@
                     $this->OnionManager->registerRecord($relay);
                 }
             }
+        }
+
+        /**
+         * @return DevicesManager
+         */
+        public function getDevicesManager(): DevicesManager
+        {
+            return $this->DevicesManager;
         }
     }
