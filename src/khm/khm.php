@@ -15,6 +15,7 @@
     use khm\Managers\AbuseManager;
     use khm\Managers\DevicesManager;
     use khm\Managers\GeoManager;
+    use khm\Managers\KnownHostsManager;
     use khm\Managers\OnionManager;
     use khm\Objects\AbuseCheck;
     use khm\Objects\GeoLookup;
@@ -73,6 +74,11 @@
         private $DevicesManager;
 
         /**
+         * @var KnownHostsManager
+         */
+        private $KnownHostsManager;
+
+        /**
          * @throws ConfigurationNotDefinedException
          */
         public function __construct()
@@ -108,6 +114,7 @@
             $this->GeoManager = new GeoManager($this);
             $this->OnionManager = new OnionManager($this);
             $this->DevicesManager = new DevicesManager($this);
+            $this->KnownHostsManager = new KnownHostsManager($this);
         }
 
         /**
@@ -352,5 +359,13 @@
         public function getDevicesManager(): DevicesManager
         {
             return $this->DevicesManager;
+        }
+
+        /**
+         * @return KnownHostsManager
+         */
+        public function getKnownHostsManager(): KnownHostsManager
+        {
+            return $this->KnownHostsManager;
         }
     }

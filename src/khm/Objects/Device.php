@@ -106,6 +106,11 @@
          */
         public $CreatedTimestamp;
 
+        public function __construct()
+        {
+            $this->Properties = new Properties();
+        }
+
         /**
          * Returns an array representation of the object
          *

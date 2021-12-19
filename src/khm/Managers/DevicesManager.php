@@ -116,7 +116,7 @@
 
             if ($Row == False)
             {
-                throw new DeviceRecordNotFoundException('The device record wa was not found');
+                throw new DeviceRecordNotFoundException('The device record was not found');
             }
 
             $Row['properties'] = ZiProto::decode($Row['properties']);
@@ -134,7 +134,7 @@
         public function updateDeviceProperties(Device $device)
         {
             $Query = QueryBuilder::update('devices', [
-                'properties' => $this->khm->getDatabase()->real_escape_string(ZiProto::encode($device->toArray()))
+                'properties' => $this->khm->getDatabase()->real_escape_string(ZiProto::encode($device->Properties->toArray()))
             ], 'fingerprint', $this->khm->getDatabase()->real_escape_string($device->Fingerprint));
 
 

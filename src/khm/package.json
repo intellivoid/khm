@@ -143,6 +143,10 @@
         },
         {
             "required": true,
+            "file": "Exceptions/KnownHostRecordNotFoundException.php"
+        },
+        {
+            "required": true,
             "file": "ThirdParty/TorProject.php"
         },
         {
@@ -164,6 +168,10 @@
         {
             "required": true,
             "file": "Objects/UserAgent.php"
+        },
+        {
+            "required": true,
+            "file": "Objects/KnownHost.php"
         },
         {
             "required": true,
@@ -191,6 +199,10 @@
         },
         {
             "required": true,
+            "file": "Objects/KnownHost/Properties.php"
+        },
+        {
+            "required": true,
             "file": "Objects/GeoLookup.php"
         },
         {
@@ -212,6 +224,10 @@
         {
             "required": true,
             "file": "Managers/DevicesManager.php"
+        },
+        {
+            "required": true,
+            "file": "Managers/KnownHostsManager.php"
         }
     ],
     "files": [
