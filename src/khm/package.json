@@ -87,6 +87,10 @@
         },
         {
             "required": true,
+            "file": "Classes/Utilities.php"
+        },
+        {
+            "required": true,
             "file": "Classes/RegexLoader.php"
         },
         {
@@ -120,6 +124,10 @@
         {
             "required": true,
             "file": "Exceptions/GeoRecordNotFoundException.php"
+        },
+        {
+            "required": true,
+            "file": "Exceptions/KnownDeviceNotFoundException.php"
         },
         {
             "required": true,
@@ -171,7 +179,15 @@
         },
         {
             "required": true,
+            "file": "Objects/KnownDevice.php"
+        },
+        {
+            "required": true,
             "file": "Objects/KnownHost.php"
+        },
+        {
+            "required": true,
+            "file": "Objects/KnownDevice/Properties.php"
         },
         {
             "required": true,
@@ -228,6 +244,10 @@
         {
             "required": true,
             "file": "Managers/KnownHostsManager.php"
+        },
+        {
+            "required": true,
+            "file": "Managers/KnownDevicesManager.php"
         }
     ],
     "files": [
