@@ -35,7 +35,11 @@
         ],
         "configuration": {
             "autoload_method": "generated_spl",
-            "main": null,
+            "main": {
+                "execution_point": "main",
+                "create_symlink": true,
+                "name": "khm_sync"
+            },
             "post_installation": [],
             "pre_installation": []
         }
@@ -267,6 +271,7 @@
         "data/asn.json",
         "data/mobile2.regex",
         "data/regexes.json",
-        "data/mobile1.regex"
+        "data/mobile1.regex",
+        "main"
     ]
 }

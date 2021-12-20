@@ -1,0 +1,38 @@
+<?php
+
+    require 'ppm';
+    require 'net.intellivoid.khm';
+
+    $inline_memory = [
+        'tor_last_sync' => 0
+    ];
+    $khm = new \khm\khm();
+
+    print('KHM Automated Processing System v1.0' . PHP_EOL);
+
+    while(true)
+    {
+        print('Connecting to Database' . PHP_EOL);
+        $khm->connectDatabase();
+
+        if(time() - $inline_memory['tor_last_sync'] > 600)
+        {
+            print('Syncing Tor network...');
+
+            try
+            {
+                $khm->syncOnionRelays();
+                $inline_memory['tor_last_sync'] = time();
+                print('OK' . PHP_EOL);
+            }
+            catch(Exception $e)
+            {
+                print('Failed to sync tor network, ' . $e->getMessage() . PHP_EOL);
+            }
+        }
+
+        print('Disconnecting from Database' . PHP_EOL);
+        $khm->disconnectDatabase();
+        print('Sleeping for 180 seconds' . PHP_EOL);
+        sleep(180);
+    }
