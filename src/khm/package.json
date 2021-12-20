@@ -2,7 +2,7 @@
     "package": {
         "package_name": "net.intellivoid.khm",
         "name": "Known Hosts Manager",
-        "version": "1.0.0.0",
+        "version": "1.0.0.1",
         "author": "Zi Xing Narrakas",
         "organization": "Intellivoid Technologies",
         "description": "Manages and checks known hosts to the system to block potential abuse hosts",
