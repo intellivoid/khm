@@ -27,19 +27,22 @@
         /**
          * Registers a new known record into the database
          *
-         * @param KnownHost $knownHost
+         * @param string $ip_address
          * @return KnownHost
          * @throws DatabaseException
          * @noinspection PhpCastIsUnnecessaryInspection
          */
-        public function registerRecord(KnownHost $knownHost): KnownHost
+        public function registerRecord(string $ip_address): KnownHost
         {
+            $knownHost = new KnownHost();
+            $knownHost->IPAddress = $ip_address;
+            $knownHost->Properties = new KnownHost\Properties();
             $knownHost->CreatedTimestamp = time();
             $knownHost->LastSeenTimestamp = time();
 
             $Query = QueryBuilder::insert_into('known_hosts', [
                 'ip_address' => $this->khm->getDatabase()->real_escape_string($knownHost->IPAddress),
-                'properties' => $this->khm->getDatabase()->real_escape_string(ZiProto::encode($knownHost->Properties)),
+                'properties' => $this->khm->getDatabase()->real_escape_string(ZiProto::encode($knownHost->Properties->toArray())),
                 'last_seen_timestamp' => (int)$knownHost->LastSeenTimestamp,
                 'created_timestamp' => (int)$knownHost->CreatedTimestamp
             ]);

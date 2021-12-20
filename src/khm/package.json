@@ -195,10 +195,6 @@
         },
         {
             "required": true,
-            "file": "Objects/QueryResults.php"
-        },
-        {
-            "required": true,
             "file": "Objects/Device.php"
         },
         {
@@ -215,7 +211,23 @@
         },
         {
             "required": true,
+            "file": "Objects/Client.php"
+        },
+        {
+            "required": true,
             "file": "Objects/KnownHost/Properties.php"
+        },
+        {
+            "required": true,
+            "file": "Objects/Client/Geo.php"
+        },
+        {
+            "required": true,
+            "file": "Objects/Client/Abuse.php"
+        },
+        {
+            "required": true,
+            "file": "Objects/Client/OnionRelay.php"
         },
         {
             "required": true,

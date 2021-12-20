@@ -109,6 +109,8 @@
         public function __construct()
         {
             $this->Properties = new Properties();
+            $this->MobileDevice = false;
+            $this->MobileBrowser = false;
         }
 
         /**

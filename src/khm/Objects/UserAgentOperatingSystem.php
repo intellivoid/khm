@@ -7,6 +7,10 @@
     class UserAgentOperatingSystem extends AbstractVersionedSoftware
     {
 
+        /**
+         * @var string|null
+         */
+        public $family;
 
         /**
          * @var string|null

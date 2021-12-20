@@ -2,6 +2,11 @@
 
     namespace khm\Classes\UserAgentParser;
 
+    use khm\Abstracts\AbstractParser;
+    use khm\Classes\RegexLoader;
+    use khm\Classes\UserAgentParser;
+    use khm\Objects\UserAgentClient;
+
     class Parser extends AbstractParser
     {
         /**
@@ -21,11 +26,10 @@
 
         /**
          * Start up the parser by importing the data file to $this->regexes
-         * @throws FileNotFoundException
          */
         public function __construct()
         {
-            parent::__construct(Utilities::getUserAgentRegexes());
+            parent::__construct(RegexLoader::getRegex());
             $this->deviceParser = new DeviceParser($this->regexes);
             $this->operatingSystemParser = new OperatingSystemParser($this->regexes);
             $this->userAgentParser = new UserAgentParser($this->regexes);

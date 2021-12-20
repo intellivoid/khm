@@ -152,7 +152,7 @@ namespace khm\Objects;
         public $LastUpdatedTimestamp;
 
         /**
-         * The Unix Timestmap for when this record was created
+         * The Unix Timestamp for when this record was created
          *
          * @var int
          */
@@ -365,6 +365,39 @@ namespace khm\Objects;
 
                 $asn = null;
             }
+
+            if(strlen((string)$geo_lookup_object->Source) == 0)
+                $geo_lookup_object->Source = null;
+            if(strlen((string)$geo_lookup_object->Continent) == 0)
+                $geo_lookup_object->Continent = null;
+            if(strlen((string)$geo_lookup_object->ContinentCode) == 0)
+                $geo_lookup_object->ContinentCode = null;
+            if(strlen((string)$geo_lookup_object->Country) == 0)
+                $geo_lookup_object->Country = null;
+            if(strlen((string)$geo_lookup_object->Region) == 0)
+                $geo_lookup_object->Region = null;
+            if(strlen((string)$geo_lookup_object->RegionCode) == 0)
+                $geo_lookup_object->RegionCode = null;
+            if(strlen((string)$geo_lookup_object->City) == 0)
+                $geo_lookup_object->City = null;
+            if(strlen((string)$geo_lookup_object->ZipCode) == 0)
+                $geo_lookup_object->ZipCode = null;
+            if(strlen((string)$geo_lookup_object->Latitude) == 0)
+                $geo_lookup_object->Latitude = null;
+            if(strlen((string)$geo_lookup_object->Longitude) == 0)
+                $geo_lookup_object->Longitude = null;
+            if(strlen((string)$geo_lookup_object->Timezone) == 0)
+                $geo_lookup_object->Timezone = null;
+            if(strlen((string)$geo_lookup_object->Offset) == 0)
+                $geo_lookup_object->Offset = null;
+            if(strlen((string)$geo_lookup_object->Currency) == 0)
+                $geo_lookup_object->Currency = null;
+            if(strlen((string)$geo_lookup_object->Organization) == 0)
+                $geo_lookup_object->Organization = null;
+            if(strlen((string)$geo_lookup_object->AS) == 0)
+                $geo_lookup_object->AS = null;
+            if(strlen((string)$geo_lookup_object->AsName) == 0)
+                $geo_lookup_object->AsName = null;
 
             return $geo_lookup_object;
         }

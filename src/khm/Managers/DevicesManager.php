@@ -93,6 +93,7 @@
                 'fingerprint',
                 'user_agent',
                 'os_family',
+                'os_version',
                 'device_family',
                 'device_brand',
                 'device_model',
@@ -159,7 +160,6 @@
             $Query = QueryBuilder::update('devices', [
                 'last_seen_timestamp' => $device->LastSeenTimestamp
             ], 'fingerprint', $this->khm->getDatabase()->real_escape_string($device->Fingerprint));
-
 
             $QueryResults = $this->khm->getDatabase()->query($Query);
 

@@ -18,4 +18,14 @@
          * Indicates that the IP address is an exit node
          */
         const TorExit = 'TOR_EXIT';
+
+        /**
+         * Indicates that the device is a mobile device
+         */
+        const MobileDevice = 'MOBILE_DEVICE';
+
+        /**
+         * Indicates that the browser is a mobile browser
+         */
+        const MobileBrowser = 'MOBILE_BROWSER';
     }

@@ -49,7 +49,7 @@
                 'id' => $this->khm->getDatabase()->real_escape_string($knownDevice->ID),
                 'ip_address' => $this->khm->getDatabase()->real_escape_string($knownDevice->IPAddress),
                 'device_fingerprint' => $this->khm->getDatabase()->real_escape_string($knownDevice->DeviceFingerprint),
-                'properties' => $this->khm->getDatabase()->real_escape_string(ZiProto::encode($knownDevice->Properties)),
+                'properties' => $this->khm->getDatabase()->real_escape_string(ZiProto::encode($knownDevice->Properties->toArray())),
                 'last_seen_timestamp' => (int)$knownDevice->LastSeenTimestamp,
                 'created_timestamp' => (int)$knownDevice->CreatedTimestamp
             ]);
@@ -133,7 +133,7 @@
         public function updateLastSeen(KnownDevice $device): KnownDevice
         {
             $device->LastSeenTimestamp = time();
-            $Query = QueryBuilder::update('known_device', [
+            $Query = QueryBuilder::update('known_devices', [
                 'last_seen_timestamp' => $device->LastSeenTimestamp
             ], 'id', $this->khm->getDatabase()->real_escape_string($device->ID));
 

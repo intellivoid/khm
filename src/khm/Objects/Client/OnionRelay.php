@@ -2,26 +2,12 @@
 
     /** @noinspection PhpMissingFieldTypeInspection */
 
-    namespace khm\Objects;
+    namespace khm\Objects\Client;
 
     use khm\Abstracts\OnionVersionStatus;
 
     class OnionRelay
     {
-        /**
-         * The IP address of the relay
-         *
-         * @var string
-         */
-        public $IPAddress;
-
-        /**
-         * The version of the IP address being used
-         *
-         * @var int
-         */
-        public $IPVersion;
-
         /**
          * Relay nickname consisting of 1–19 alphanumerical characters.
          *
@@ -210,8 +196,6 @@
         public function toArray(): array
         {
             return [
-                'ip_address' => $this->IPAddress,
-                'ip_version' => (int)$this->IPVersion,
                 'nickname' => $this->Nickname,
                 'fingerprint' => $this->Fingerprint,
                 'or_addresses' => $this->OrAddresses,
@@ -247,12 +231,6 @@
         public static function fromArray(array $data): OnionRelay
         {
             $OnionRelayObject = new OnionRelay();
-
-            if(isset($data['ip_address']))
-                $OnionRelayObject->IPAddress = $data['ip_address'];
-
-            if(isset($data['ip_version']))
-                $OnionRelayObject->IPVersion = (int)$data['ip_version'];
 
             if(isset($data['nickname']))
                 $OnionRelayObject->Nickname = $data['nickname'];
@@ -323,9 +301,17 @@
             if(isset($data['created_timestamp']))
                 $OnionRelayObject->CreatedTimestmap = (int)$data['created_timestamp'];
 
-            if($OnionRelayObject->DirAddress == null)
-                $OnionRelayObject->DirPort = null;
-
             return $OnionRelayObject;
+        }
+
+        /**
+         * Constructs object from a onion relay record
+         *
+         * @param \khm\Objects\OnionRelay $relay
+         * @return OnionRelay
+         */
+        public static function fromOnionRelayObject(\khm\Objects\OnionRelay $relay): OnionRelay
+        {
+            return self::fromArray($relay->toArray());
         }
     }

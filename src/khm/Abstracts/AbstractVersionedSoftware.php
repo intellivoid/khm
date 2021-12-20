@@ -2,8 +2,6 @@
 
     namespace khm\Abstracts;
 
-    use DynamicalWeb\Abstracts\AbstractSoftware;
-
     abstract class AbstractVersionedSoftware extends AbstractSoftware
     {
         /**

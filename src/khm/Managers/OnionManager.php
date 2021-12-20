@@ -124,6 +124,10 @@
                 throw new OnionRecordNotFoundException('The onion record for the IP \'' . $ip_address . '\' was not found');
             }
 
+            $Row['flags'] = ZiProto::decode($Row['flags']);
+            $Row['or_addresses'] = ZiProto::decode($Row['or_addresses']);
+            $Row['exit_addresses'] = ZiProto::decode($Row['exit_addresses']);
+
             return OnionRelay::fromArray($Row);
         }
 

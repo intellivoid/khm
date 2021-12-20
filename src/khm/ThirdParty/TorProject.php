@@ -109,6 +109,63 @@
                 $onion_relay->LastUpdatedTimestmap = time();
                 $onion_relay->CreatedTimestmap = time();
 
+                $secondary_addresses = [];
+
+                if(isset($relay['or_addresses']) && count($relay['or_addresses']) > 0)
+                {
+                    foreach($relay['or_addresses'] as $address)
+                    {
+                        $first_address = explode(':', $address)[0];
+                        if(in_array($first_address, $secondary_addresses) == false)
+                        {
+                            if (filter_var($first_address, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4))
+                            {
+                                $second_onion_relay = $onion_relay;
+                                $second_onion_relay->IPAddress = $first_address;
+                                $second_onion_relay->IPVersion = 4;
+                                $results[] = $second_onion_relay;
+                                $secondary_addresses[] = $first_address;
+                            }
+                            elseif (filter_var($first_address, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6))
+                            {
+                                $second_onion_relay = $onion_relay;
+                                $second_onion_relay->IPAddress = $first_address;
+                                $second_onion_relay->IPVersion = 6;
+                                $results[] = $second_onion_relay;
+                                $secondary_addresses[] = $first_address;
+                            }
+                        }
+                    }
+                }
+
+                if(isset($relay['exit_addresses']) && count($relay['exit_addresses']) > 0)
+                {
+                    foreach($relay['exit_addresses'] as $address)
+                    {
+                        $first_address = explode(':', $address)[0];
+                        if(in_array($first_address, $secondary_addresses) == false)
+                        {
+                            if (filter_var($first_address, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4))
+                            {
+                                $second_onion_relay = $onion_relay;
+                                $second_onion_relay->IPAddress = $first_address;
+                                $second_onion_relay->IPVersion = 4;
+                                $results[] = $second_onion_relay;
+                                $secondary_addresses[] = $first_address;
+                            }
+                            elseif (filter_var($first_address, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6))
+                            {
+                                $second_onion_relay = $onion_relay;
+                                $second_onion_relay->IPAddress = $first_address;
+                                $second_onion_relay->IPVersion = 6;
+                                $results[] = $second_onion_relay;
+                                $secondary_addresses[] = $first_address;
+                            }
+                        }
+
+                    }
+                }
+
                 $results[] = $onion_relay;
             }
 

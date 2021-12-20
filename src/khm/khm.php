@@ -9,9 +9,14 @@
     use acm2\Objects\Schema;
     use Exception;
     use khm\Abstracts\GeoLookupSource;
+    use khm\Abstracts\HostFlags;
+    use khm\Abstracts\SearchMethods\DeviceSearchMethod;
+    use khm\Classes\DeviceDetection;
+    use khm\Classes\Utilities;
     use khm\Exceptions\AbuseRecordNotFoundException;
     use khm\Exceptions\BadGeoSourceException;
     use khm\Exceptions\GeoRecordNotFoundException;
+    use khm\Exceptions\NoUserAgentProvidedException;
     use khm\Managers\AbuseManager;
     use khm\Managers\DevicesManager;
     use khm\Managers\GeoManager;
@@ -19,7 +24,11 @@
     use khm\Managers\KnownHostsManager;
     use khm\Managers\OnionManager;
     use khm\Objects\AbuseCheck;
+    use khm\Objects\Client;
+    use khm\Objects\Device;
     use khm\Objects\GeoLookup;
+    use khm\Objects\KnownDevice;
+    use khm\Objects\KnownHost;
     use khm\Objects\OnionRelay;
     use khm\ThirdParty\AbuseIPDB;
     use khm\ThirdParty\IpAPI;
@@ -324,6 +333,74 @@
         }
 
         /**
+         * Detects the client's device
+         *
+         * @return Device
+         * @throws Exceptions\DatabaseException
+         * @throws Exceptions\NoUserAgentProvidedException
+         */
+        public function detectDevice(): Device
+        {
+            $device = DeviceDetection::detectDevice();
+
+            try
+            {
+                $device = $this->DevicesManager->getRecord(DeviceSearchMethod::ByFingerprint, $device->Fingerprint);
+                return $this->DevicesManager->updateLastSeen($device);
+            }
+            catch(Exception $e)
+            {
+                return $this->DevicesManager->registerRecord($device);
+            }
+        }
+
+        /**
+         * Returns the Known Host record
+         *
+         * @return KnownHost
+         * @throws Exceptions\DatabaseException
+         */
+        public function getKnownHost(): KnownHost
+        {
+            $client_ip = DeviceDetection::getClientIP();
+
+            try
+            {
+                $knownHost = $this->KnownHostsManager->getRecord($client_ip);
+            }
+            catch (Exceptions\KnownHostRecordNotFoundException $e)
+            {
+                return $this->KnownHostsManager->registerRecord($client_ip);
+            }
+
+            return $this->getKnownHostsManager()->updateLastSeen($knownHost);
+        }
+
+        /**
+         * Returns a known device record
+         *
+         * @param Device $device
+         * @param KnownHost $knownHost
+         * @return KnownDevice
+         * @throws Exceptions\DatabaseException
+         */
+        public function getKnownDevice(Device $device, KnownHost $knownHost): KnownDevice
+        {
+            $id = Utilities::generateKnownDeviceId($knownHost, $device);
+
+            try
+            {
+                $knownDevice = $this->KnownDevicesManager->getRecord($id);
+            }
+            catch (Exceptions\KnownDeviceNotFoundException $e)
+            {
+                return $this->KnownDevicesManager->registerRecord($device, $knownHost);
+            }
+
+            return $this->getKnownDevicesManager()->updateLastSeen($knownDevice);
+        }
+
+        /**
          * Preforms a tor IP lookup against the database if the record exists
          *
          * @param string $ip_address
@@ -382,5 +459,105 @@
         public function getKnownDevicesManager(): KnownDevicesManager
         {
             return $this->KnownDevicesManager;
+        }
+
+        /**
+         * Identifies the current client and returns the results
+         *
+         * @return Client
+         * @throws Exceptions\DatabaseException
+         */
+        public function identify(): Client
+        {
+            $client_object = new Client();
+
+            // Get the IP address
+            $client_object->IPAddress = DeviceDetection::getClientIP();
+
+            // Detect the version of the IP address
+            if(filter_var($client_object->IPAddress, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4))
+            {
+                $client_object->IPVersion = 4;
+            }
+            if(filter_var($client_object->IPAddress, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6))
+            {
+                $client_object->IPVersion = 6;
+            }
+
+            // Detect the device
+            try
+            {
+                $client_object->Device = $this->detectDevice();
+            }
+            catch(NoUserAgentProvidedException $exception)
+            {
+                unset($exception);
+            }
+
+            // Detect the known host
+            $known_host = $this->getKnownHost();
+
+            // Detect the known device
+            if($client_object->Device !== null)
+            {
+                $known_device = $this->getKnownDevice($client_object->Device, $known_host);
+                $client_object->KnownDeviceID = $known_device->ID;
+            }
+
+            // Detect the abuse status
+            try
+            {
+                $client_object->Abuse = Client\Abuse::fromAbuseCheck($this->abuseLookup($client_object->IPAddress));
+            }
+            catch(Exception $e)
+            {
+                unset($e);
+            }
+
+            // Detect the onion status
+            try
+            {
+                $client_object->Onion = Client\OnionRelay::fromOnionRelayObject($this->torLookup($client_object->IPAddress));
+            }
+            catch(Exception $e)
+            {
+                unset($e);
+            }
+
+            // Detect the geo data
+            try
+            {
+                $client_object->Geo = Client\Geo::fromGeoLookup($this->geoLookup($client_object->IPAddress));
+            }
+            catch(Exception $e)
+            {
+                unset($e);
+            }
+
+            $client_object->Flags = [];
+            if($client_object->Onion !== null)
+            {
+                $client_object->Flags[] = HostFlags::TorRelay;
+
+                if($client_object->Onion->Exit)
+                    $client_object->Flags[] = HostFlags::TorExit;
+            }
+
+            if($client_object->Abuse !== null)
+            {
+                if($client_object->Abuse->AbuseConfidenceScore >= 70)
+                    $client_object->Flags[] = HostFlags::BadUser;
+            }
+
+            if($client_object->Device !== null)
+            {
+                if($client_object->Device->MobileDevice)
+                    $client_object->Flags[] = HostFlags::MobileDevice;
+
+                if($client_object->Device->MobileBrowser)
+                    $client_object->Flags[] = HostFlags::MobileBrowser;
+            }
+
+            return $client_object;
         }
     }
